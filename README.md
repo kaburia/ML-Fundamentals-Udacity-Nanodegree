@@ -1,6 +1,6 @@
 # ND
 
-<!-- ![image](https://github.com/kaburia/ND/assets/88529649/5ca461ab-3655-4142-9e2e-8a46a3d9a59b) -->
+![image](https://github.com/kaburia/ND/assets/88529649/5ca461ab-3655-4142-9e2e-8a46a3d9a59b)
 From the first run of the model based on the fit_summary()
 
 The best model from fitting the train data to the Tabular Predictor is the "WeightedEnsemble_L3" model. Here are the details of the training run:
