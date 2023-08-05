@@ -21,15 +21,28 @@ def get_model_transfer_learning(model_name="resnet18", n_classes=50):
     # Freeze all parameters in the model
     # HINT: loop over all parameters. If "param" is one parameter,
     # "param.requires_grad = False" freezes it
-    # YOUR CODE HERE
+    for param in model_transfer.parameters():
+        # YOUR CODE HERE
+        param.requires_grad = False
+    
 
     # Add the linear layer at the end with the appropriate number of classes
     # 1. get numbers of features extracted by the backbone
-    num_ftrs  = # YOUR CODE HERE
+    num_ftrs  = model_transfer.fc.in_features
 
     # 2. Create a new linear layer with the appropriate number of inputs and
     #    outputs
-    model_transfer.fc  = # YOUR CODE HERE
+    model_transfer.fc  = nn.Sequential(
+                                        nn.Linear(num_ftrs, 1024),
+                                        nn.ReLU(),
+                                        nn.Dropout(0.5),
+                                        
+                                        nn.Linear(1024, 512),
+                                        nn.ReLU(),
+                                        nn.Dropout(0.5),
+                                        
+                                        nn.Linear(512, n_classes)
+                                    )
 
     return model_transfer
 
@@ -52,7 +65,7 @@ def test_get_model_transfer_learning(data_loaders):
     model = get_model_transfer_learning(n_classes=23)
 
     dataiter = iter(data_loaders["train"])
-    images, labels = dataiter.next()
+    images, labels = next(dataiter)
 
     out = model(images)
 

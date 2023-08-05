@@ -27,47 +27,39 @@ class MyModel(nn.Module):
 
         # Define a CNN architecture with two convolutional layers
         self.features = nn.Sequential(
-            # layer 1
-            nn.Conv2d(3, 32, kernel_size=3,  padding=1),
+            nn.Conv2d(3, 64, kernel_size=3, padding=1),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2),
-
-            # layer 2
-            nn.Conv2d(32, 32, kernel_size=3, padding=1),
+            
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
             nn.ReLU(),
-
-            nn.Conv2d(32, 64, kernel_size=3, padding=1),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            
+            nn.Conv2d(128, 256, kernel_size=3, padding=1),
             nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2)
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            
+            nn.Conv2d(256, 512, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
         )
-
-        # calculate the number of output features from the CNN for the fully connected layer
-        # input image = 224x224
-        # 2 MaxPooling layers with 2x2 window and stride 2
-        # after the first layer = 112x112
-        # after the second layer = 56x56
         
-        self.num_features = 64 * 56 * 56
-
-        # Define a fully connected (linear) layer as the classifier
         self.classifier = nn.Sequential(
-            nn.Dropout(p=dropout),
-            nn.Linear(self.num_features, 256),  # Fully connected layer with 256 output units
+            nn.Linear(512 * 14 * 14, 1024),
             nn.ReLU(),
             nn.Dropout(p=dropout),
-            nn.Linear(256, num_classes),  # Fully connected layer with num_classes output units
+            
+            nn.Linear(1024, 512),
+            nn.ReLU(),
+            nn.Dropout(p=dropout),
+            
+            nn.Linear(512, num_classes)
         )
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # Process the input tensor through the feature extractor
+    def forward(self, x):
         x = self.features(x)
-
-        # Flatten the tensor before passing it to the classifier
-        x = torch.flatten(x, 1)
-
-        # Process the flattened tensor through the classifier
+        x = x.view(x.size(0), -1)
         x = self.classifier(x)
-        
         return x
 
 ######################################################################################

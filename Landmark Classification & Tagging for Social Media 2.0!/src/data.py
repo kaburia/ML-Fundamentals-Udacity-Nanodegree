@@ -46,34 +46,37 @@ def get_data_loaders(
     # HINT: resize the image to 256 first, then crop them to 224, then add the
     # appropriate transforms for that step
     data_transforms = {
-        "train": transforms.Compose(
-            # data augmentation
-            (
-                transforms.Resize(256),
-                transforms.RandomCrop(224),
-                transforms.RandomHorizontalFlip(),
-                transforms.RandomRotation(10),
-                transforms.ToTensor(),
-                transforms.Normalize(mean=mean, std=std),
-            )
-        ),
-        "valid": transforms.Compose(
-            (
-                transforms.Resize(256),
-                transforms.RandomCrop(224),
-                transforms.ToTensor(),
-                transforms.Normalize(mean=mean, std=std),
-            )
-        ),
-        "test": transforms.Compose(
-            (
-                transforms.Resize(256),
-                transforms.RandomCrop(224),
-                transforms.ToTensor(),
-                transforms.Normalize(mean=mean, std=std),
-            )
-        ),
-    }
+    "train": transforms.Compose(
+        (
+            transforms.Resize(256),
+            transforms.RandomResizedCrop(224),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation(30),
+            transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+            transforms.RandomAffine(degrees=0, translate=(0.1, 0.1), scale=(0.8, 1.2)),
+            transforms.RandomApply([transforms.GaussianBlur(kernel_size=23)], p=0.2),
+            # transforms.RandomErasing(p=0.5, scale=(0.02, 0.2)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=mean, std=std),
+        )
+    ),
+    "valid": transforms.Compose(
+        (
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=mean, std=std),
+        )
+    ),
+    "test": transforms.Compose(
+        (
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=mean, std=std),
+        )
+    ),
+}
 
     # Create train and validation datasets
     train_data = datasets.ImageFolder(
