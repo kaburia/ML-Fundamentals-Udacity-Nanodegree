@@ -23,3 +23,9 @@ These models' accuracies are subsequently compared to identify the most effectiv
 The ultimate goal is to deploy an application based on the best-performing CNN, enabling automated prediction of image locations based on depicted landmarks. 
 By addressing the challenge of missing metadata, the project showcases the potential of CNNs in enriching user experiences and enhancing the utility of photo sharing and storage services. 
 This endeavor is crucial in facilitating advanced features like tag suggestions and automated photo organization, thereby highlighting the practical value of machine learning in real-world scenarios.
+
+## Project 4
+### ML Workflow For Scones Unlimited on Amazon SageMaker
+
+![image](https://github.com/kaburia/ND/assets/88529649/985fccb3-659e-45ec-933f-f6d57f250a92)
+
